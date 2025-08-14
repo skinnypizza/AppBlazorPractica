@@ -1,0 +1,65 @@
+﻿@page "/formRepresentante"
+@using System.ComponentModel.DataAnnotations
+
+<h3 class="text-center mb-4">Registro de Representante de Ventas</h3>
+
+<EditForm Model="@rep" OnValidSubmit="Guardar" class="container p-4 border rounded shadow-sm bg-light">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="alert alert-danger" />
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Num_Empl:</label>
+        <InputText class="form-control" @bind-Value="rep.Num_Empl" />
+        <ValidationMessage For="@(() => rep.Num_Empl)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Nombre:</label>
+        <InputText class="form-control" @bind-Value="rep.Nombre" />
+        <ValidationMessage For="@(() => rep.Nombre)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Edad:</label>
+        <InputNumber class="form-control" @bind-Value="rep.Edad" />
+        <ValidationMessage For="@(() => rep.Edad)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Cargo:</label>
+        <InputText class="form-control" @bind-Value="rep.Cargo" />
+        <ValidationMessage For="@(() => rep.Cargo)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Fecha de Contrato:</label>
+        <InputDate class="form-control" @bind-Value="rep.FechaContrato" />
+        <ValidationMessage For="@(() => rep.FechaContrato)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Cuota:</label>
+        <InputNumber class="form-control" @bind-Value="rep.Cuota" />
+        <ValidationMessage For="@(() => rep.Cuota)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Ventas:</label>
+        <InputNumber class="form-control" @bind-Value="rep.Ventas" />
+        <ValidationMessage For="@(() => rep.Ventas)" class="text-danger" />
+    </div>
+
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary px-4">Guardar</button>
+    </div>
+</EditForm>
+
+@code {
+    RepresentanteVentas rep = new();
+
+    private void Guardar()
+    {
+        // Aquí se podría guardar a una base de datos
+        Console.WriteLine("Formulario válido. Guardado exitosamente.");
+    }
+}
