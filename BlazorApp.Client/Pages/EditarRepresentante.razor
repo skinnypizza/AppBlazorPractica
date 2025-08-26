@@ -1,8 +1,11 @@
-﻿@page "/registroRepresentante"
+﻿@page "/formpage/editarRepresentante/{Nro_Empl}"
 @inject NavigationManager NavigationManager
-<h3>Registro de Representante de Ventas</h3>
+<h3>Editar de Representante de Ventas</h3>
 <FormRepresentante/>
 @code {
+    
+    [Parameter]
+    public string? Nro_Empl { get; set; }
     public RepresentanteVentas oRepresentanteFormCLS { get; set; } = new RepresentanteVentas();
     private void guardar()
     {
