@@ -1,8 +1,8 @@
 ﻿@page "/formpage"
-@inject NavigationManager NavigationManager
-@inject RepresentanteService RepresentanteService
-<button @onclick="navegar" class="btn btn-primary">Navegar a Representante Form Page</button>
-@if (oListaRepresentante != null && oListaRepresentante.Count != 0)
+@inject NavigationManager navigationManager
+@inject RepresentanteService representanteService
+<button @onclick="navegar" class="btn btn-danger">Agregar</button>
+@if (lista != null && lista.Count != 0)
 {
     <table class="table table-striped">
         <thead>
@@ -17,10 +17,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in oListaRepresentante)
+            @foreach (var item in lista)
             {
                 <tr>
-                    <td>intParse((@item.Num_Empl)</td>
+                    <td>@item.Num_Empl</td>
                     <td>@item.Nombre</td>
                     <td>@item.Edad</td>
                     <td>@item.Cargo</td>
@@ -35,7 +35,7 @@
                             </svg>
                         </button>
                         <button class="btn-danger"
-                                @onclick = "(()=>eliminarRepresentante(int.Parse(item.Num_Empl)))">
+                                @onclick = "(()=>mostrarConfirmacion(int.Parse(item .Num_Empl)))">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
@@ -47,43 +47,60 @@
         </tbody>
     </table>
 }
+
+@if (mostrarModal)
+{
+    <div class="modal show d-block" tabindex="-1" style="background:rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmación</h5>
+                </div>
+                <div class="modal-body">
+                    <p>¿Seguro que desea eliminar el registro?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CancelarEliminar">Cancelar</button>
+                    <button class="btn btn-danger" @onclick="ConfirmarEliminar">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
-    public List<RepresentanteVentas> oListaRepresentante { get; set; } = new List<RepresentanteVentas>();
-    public List<RepresentanteList> lista { get; set; } = new List<RepresentanteList>();
+    public List<RepresentanteVentas> lista { get; set; } = new List<RepresentanteVentas>();
+    private bool mostrarModal = false;
+    private int idEliminar;
+
     protected override Task OnInitializedAsync()
     {
-        oListaRepresentante.Add(new RepresentanteVentas {
-            Num_Empl = "1",
-            Nombre = "Juan Perez",
-            Edad = 30,
-            Cargo = "Vendedor",
-            FechaContrato = DateTime.Now.AddYears(-2),
-            Cuota = 50000,
-            Ventas = 60000
-        });
-        oListaRepresentante.Add(new RepresentanteVentas {
-            Num_Empl = "2",
-            Nombre = "Maria Lopez",
-            Edad = 28,
-            Cargo = "Vendedora",
-            FechaContrato = DateTime.Now.AddYears(-1),
-            Cuota = 40000,
-            Ventas = 45000
-        });
-        //lista = RepresentanteService.listarRepresentantes();
+        lista = representanteService.listarRepresentantes();
         return base.OnInitializedAsync();
     }
     private void navegar()
     {
-        NavigationManager.NavigateTo("/formpage/registroRepresentante");
+        navigationManager.NavigateTo("/formpage/registroRepresentante");
     }
     private void recuperarRepresentante(int Num_Empl)
     {
-        NavigationManager.NavigateTo("/formpage/editarRepresentante/{Nro_Empl}");
+        navigationManager.NavigateTo("/formpage/editarRepresentante/" + Num_Empl);
     }
-    private void eliminarRepresentante(int Num_Empl)
+    private void mostrarConfirmacion(int Num_Empl)
     {
-        var listaQueda = oListaRepresentante.Where(p => p.Num_Empl != Num_Empl.ToString()).ToList();
-        oListaRepresentante = listaQueda;
+        idEliminar = Num_Empl;
+        mostrarModal = true;
+    }
+    private void CancelarEliminar()
+    {
+        mostrarModal = false;
+        idEliminar = 0;
+    }
+    private void ConfirmarEliminar()
+    {
+        var listaQueda = lista.Where(p => int.Parse(p.Num_Empl) != idEliminar).ToList();
+        lista = listaQueda;
+        mostrarModal = false;
+        idEliminar = 0;
     }
 }

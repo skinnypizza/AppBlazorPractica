@@ -1,5 +1,5 @@
-﻿@page "/formRepresentante"
-@inject NavigationManager NavigationManager
+﻿@inject NavigationManager NavigationManager
+
 <EditForm Model="@oRepresentanteFormCLS" OnValidSubmit="@guardar">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <div class="mt-3">
@@ -44,7 +44,17 @@
 
 </EditForm>
 @code {
+    [Parameter]
+    public RepresentanteVentas Representante { get; set; }
     public RepresentanteVentas oRepresentanteFormCLS { get; set; } = new RepresentanteVentas();
+
+    protected override void OnInitialized()
+    {
+        if (Representante != null)
+        {
+            oRepresentanteFormCLS = Representante;
+        }
+    }
     private void guardar()
     {
         Console.WriteLine("Guardando");
