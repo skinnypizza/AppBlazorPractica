@@ -42,6 +42,39 @@ namespace BlazorApp.Client.Services
         {
             return lista;
         }
+        public RepresentanteVentas recuperarRepresentantePorId(int Num_Empl)
+        {
+            var obj = lista.Where(p => p.Num_Empl == "1").FirstOrDefault();
+            if(obj != null)
+            {
+                return new RepresentanteVentas
+                {
+                    Num_Empl = obj.Num_Empl,
+                    Nombre = obj.Nombre,
+                    Edad = obj.Edad,
+                    Cargo = obj.Cargo,
+                    FechaContrato = obj.FechaContrato,
+                    Cuota = obj.Cuota,
+                    Ventas = obj.Ventas
+                };
+            }
+            else
+            {
+                return new RepresentanteVentas();
+            }
+        }
+        public void guardarRepresentante(RepresentanteVentas representanteVentas)
+        {
+            lista.Add(new RepresentanteVentas { 
+                Num_Empl = representanteVentas.Num_Empl, 
+                Nombre = representanteVentas.Nombre, 
+                Edad = representanteVentas.Edad,
+                Cargo = representanteVentas.Cargo,
+                FechaContrato = representanteVentas.FechaContrato,
+                Cuota = representanteVentas.Cuota,
+                Ventas = representanteVentas.Ventas
+            });
+        }
     }
 }
 

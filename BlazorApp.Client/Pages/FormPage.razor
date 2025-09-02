@@ -1,7 +1,7 @@
 ﻿@page "/formpage"
 @inject NavigationManager navigationManager
 @inject RepresentanteService representanteService
-<button @onclick="navegar" class="btn btn-danger">Agregar</button>
+<button @onclick="nuevo" class="btn btn-danger">Agregar</button>
 @if (lista != null && lista.Count != 0)
 {
     <table class="table table-striped">
@@ -78,7 +78,7 @@
         lista = representanteService.listarRepresentantes();
         return base.OnInitializedAsync();
     }
-    private void navegar()
+    private void nuevo()
     {
         navigationManager.NavigateTo("/formpage/registroRepresentante");
     }

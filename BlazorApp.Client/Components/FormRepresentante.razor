@@ -1,41 +1,42 @@
 ﻿@inject NavigationManager NavigationManager
-
-<EditForm Model="@oRepresentanteFormCLS" OnValidSubmit="@guardar">
+@inject RepresentanteService representanteService
+<h2>@Titulo</h2>
+<EditForm Model="@Representante" OnValidSubmit="@guardar">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <div class="mt-3">
         <label>Num_Empl</label>
-        <InputText class="form-control" @bind-Value="oRepresentanteFormCLS.Num_Empl" />
-        <ValidationMessage For="(() => oRepresentanteFormCLS.Num_Empl)" />
+        <InputText class="form-control" @bind-Value="Representante.Num_Empl" />
+        <ValidationMessage For="(() => Representante.Num_Empl)" />
     </div>
     <div class="mt-3">
         <label>Nombre</label>
-        <InputText class="form-control" @bind-Value="oRepresentanteFormCLS.Nombre" />
-        <ValidationMessage For="(() => oRepresentanteFormCLS.Nombre)" />
+        <InputText class="form-control" @bind-Value="Representante.Nombre" />
+        <ValidationMessage For="(() => Representante.Nombre)" />
     </div>
     <div class="mt-3">
         <label>Edad</label>
-        <InputNumber class="form-control" @bind-Value="oRepresentanteFormCLS.Edad" />
-        <ValidationMessage For="(() => oRepresentanteFormCLS.Edad)" />
+        <InputNumber class="form-control" @bind-Value="Representante.Edad" />
+        <ValidationMessage For="(() => Representante.Edad)" />
     </div>
     <div class="mt-3">
         <label>Cargo</label>
-        <InputText class="form-control" @bind-Value="oRepresentanteFormCLS.Cargo" />
-        <ValidationMessage For="(() => oRepresentanteFormCLS.Cargo)" />
+        <InputText class="form-control" @bind-Value="Representante.Cargo" />
+        <ValidationMessage For="(() => Representante.Cargo)" />
     </div>
     <div class="mt-3">
         <label>Fecha de Contrato</label>
-        <InputDate class="form-control" @bind-Value="oRepresentanteFormCLS.FechaContrato" />
-        <ValidationMessage For="(() => oRepresentanteFormCLS.FechaContrato)" />
+        <InputDate class="form-control" @bind-Value="Representante.FechaContrato" />
+        <ValidationMessage For="(() => Representante.FechaContrato)" />
     </div>
     <div class="mt-3">
         <label>Cuota</label>
-        <InputNumber class="form-control" @bind-Value="oRepresentanteFormCLS.Cuota" />
-        <ValidationMessage For="(() => oRepresentanteFormCLS.Cuota)" />
+        <InputNumber class="form-control" @bind-Value="Representante.Cuota" />
+        <ValidationMessage For="(() => Representante.Cuota)" />
     </div>
     <div class="mt-3">
         <label>Ventas</label>
-        <InputNumber class="form-control" @bind-Value="oRepresentanteFormCLS.Ventas" />
-        <ValidationMessage For="(() => oRepresentanteFormCLS.Ventas)" />
+        <InputNumber class="form-control" @bind-Value="Representante.Ventas" />
+        <ValidationMessage For="(() => Representante.Ventas)" />
     </div>
     <div class="mt-3">
         <button type="submit" class="btn btn-success">Guardar</button>
@@ -44,20 +45,25 @@
 
 </EditForm>
 @code {
+    public RepresentanteVentas Representante { get; set; } = new RepresentanteVentas();
     [Parameter]
-    public RepresentanteVentas Representante { get; set; }
-    public RepresentanteVentas oRepresentanteFormCLS { get; set; } = new RepresentanteVentas();
+    public int Num_Empl { get; set; }
+    public string Titulo { get; set; } = "";
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        if (Representante != null)
+        if (Num_Empl == 0) Titulo = "Agregar Representante de Ventas";
+        else
         {
-            oRepresentanteFormCLS = Representante;
+            Titulo = "Editar Representante de Ventas";
+            Representante = representanteService.recuperarRepresentantePorId(Num_Empl);
         }
+        await base.OnInitializedAsync();
     }
     private void guardar()
     {
-        Console.WriteLine("Guardando");
+        representanteService.guardarRepresentante(Representante);
+        NavigationManager.NavigateTo("/formpage");
     }
     private void regresar()
     {
